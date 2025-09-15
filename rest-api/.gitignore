@@ -1,0 +1,6 @@
+.vercel
+node_modules
+.prettierignore
+.prettierrc.yaml
+.eslintignore
+.eslintrc.cjs

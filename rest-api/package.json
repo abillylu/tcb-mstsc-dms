@@ -1,0 +1,45 @@
+{
+  "name": "tcb-mstsc-dms-rest-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devStart": "nodemon script.ts",
+    "reset": "prisma migrate reset --schema=prisma/schema.prisma",
+    "migrate": "prisma migrate dev --schema=prisma/schema.prisma",
+    "generate": "prisma generate --schema=prisma/schema.prisma",
+    "seed": "ts-node --transpile-only prisma/seed.ts",
+    "studio": "prisma studio --schema=prisma/schema.prisma",
+    "start": "nodemon --exec npx ts-node ./api/index.ts",
+    "vercel-build": "echo hello",
+    "postinstall": "prisma generate --schema=prisma/schema.prisma",
+    "write": "prettier . --write"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.10.0",
+    "pdfmake": "^0.2.18",
+    "svg-to-pdfkit": "^0.1.8",
+    "uuid": "^11.1.0",
+    "validator": "^13.12.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.10",
+    "eslint": "^8.57.0",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.3.2",
+    "prisma": "^6.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  }
+}

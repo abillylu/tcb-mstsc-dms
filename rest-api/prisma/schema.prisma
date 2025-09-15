@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model users_table {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  user_type Role?    @default(USER)
+  signature String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  prepared_statements statement_of_accounts_table[] @relation("PreparedBy")
+  received_statements statement_of_accounts_table[] @relation("ReceivedBy")
+  handled_statements statement_of_accounts_table[] @relation("HandledBy")
+
+  billing_statements billing_statements_table[]
+}
+
+model containers_table {
+  id         String   @id @default(uuid())
+  van_number String
+  size       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  statement_of_accounts statement_of_accounts_on_containers_table[]
+}
+
+model statement_of_accounts_table {
+  id String @id @default(uuid())
+
+  customer    customers_table @relation(fields: [customer_id], references: [id])
+  customer_id String
+
+  prepared_by    users_table @relation("PreparedBy", fields: [prepared_by_id], references: [id])
+  prepared_by_id String
+
+  received_by    users_table @relation("ReceivedBy", fields: [received_by_id], references: [id])
+  received_by_id String
+
+  handled_by    users_table @relation("HandledBy", fields: [handled_by_id], references: [id])
+  handled_by_id String
+
+  soa_number        String   @unique
+  date_issued       DateTime
+
+  delivery_receipt  String?
+  pull_out_receipt  String?
+  equipment_receipt String?
+  condition_report  String?
+  extra             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  containers statement_of_accounts_on_containers_table[]
+
+  billing_statement billing_statements_table?
+}
+
+model statement_of_accounts_on_containers_table {
+  // id             String                      @id @default(uuid())
+  container      containers_table            @relation(fields: [container_id], references: [id])
+  container_id   String
+  soa            statement_of_accounts_table @relation(fields: [soa_id], references: [id])
+  soa_id         String
+  date_delivered DateTime
+  location       String
+  amount         Float
+  createdAt      DateTime                    @default(now())
+  updatedAt      DateTime                    @updatedAt
+
+  @@id([container_id, soa_id])
+}
+
+model customers_table {
+  id                    String                        @id @default(uuid())
+  name                  String
+  address_line_1        String
+  address_line_2        String
+  city                  String
+  region                String?
+  postal_code           String?
+  createdAt             DateTime                      @default(now())
+  updatedAt             DateTime                      @updatedAt
+  statement_of_accounts statement_of_accounts_table[]
+}
+
+model billing_statements_table {
+  id String @id @default(uuid())
+
+  soa    statement_of_accounts_table @relation(fields: [soa_id], references: [id])
+  soa_id String                      @unique
+
+  prepared_by    users_table @relation(fields: [prepared_by_id], references: [id])
+  prepared_by_id String
+
+  bs_number   String   @unique
+  date_issued DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  TCB
+  MSTSC
+  PLACEHOLDER_USER
+  PLACEHOLDER_TCB
+  PLACEHOLDER_MSTSC
+  ADMIN
+}
