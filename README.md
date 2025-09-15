@@ -2,7 +2,7 @@
 
 ## Document Management System for both Thor Custom's Brokerage and Mighty Star Trucking Services Company
 
-## Tech Stack
+## Technology Stack
 
 **Programming Languages** → [TypeScript](https://www.typescriptlang.org), [Python](https://www.python.org)
 
@@ -27,7 +27,7 @@ python -m venv env
 pip install -r requirements.txt
 ```
 
-*This Python project uses excel and pdf files from the company. Unfortunately, these sample files couldn't be provided since these are billing statements and statement of accounts. However, the solution can be viewed on how these files were organized. The output of this solution can be viewed in the backlogs.ts file:* (***electron → src → ui → data → backlogs.ts***)
+*This Python project uses excel and pdf files from the company. Unfortunately, these sample files couldn't be provided since these are billing statements and statement of accounts. However, the solution can be viewed on how these files were organized. The output of this solution can be viewed in* **backlogs.json** *or in* **backlogs.ts** (***electron → src → ui → data → backlogs.ts***) *to see how it's used in the application.*
 
 ## Setting up the frontend (Electron, React)
 Move to the *electron* folder and do:
